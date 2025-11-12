@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.csv
+*.ipynb
+venv/
+app/static/result.jpg
