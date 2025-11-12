@@ -9,3 +9,8 @@ class Config:
     IMG_SIZE = (224, 224)
     CLASS_NAMES = ["none", "acne", "carcinoma", "eczema", "keratosis", "rosacea", "milia"]
     NUM_CLASSES = len(CLASS_NAMES)
+    
+    CLASSES_REQUIRING_CLASSIFICATION = {
+        'acne scar', 'melasma', 'nodules', 'papules',
+        'pustules', 'skinredness', 'vascular'
+    }

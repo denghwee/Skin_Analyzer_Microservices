@@ -67,3 +67,4 @@ Pretrained model weights are stored in `app/models/` and are loaded at runtime; 
 - Delete `app/static/result.jpg` between runs if you need to clear prior results.
 
 
+
