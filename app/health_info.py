@@ -580,21 +580,21 @@ MEDIUM_CONFIDENCE_THRESHOLD = 0.5
 def generate_health_issue_info(results, detection_confidences):
     """
     Tạo thông tin về vấn đề sức khỏe dựa trên kết quả classification và detection
-    Bao gồm cả bệnh da liễu và vấn đề thẩm mỹ được phát hiện
+    Bao gồm TẤT CẢ các bệnh da liễu được phân loại và TẤT CẢ vấn đề thẩm mỹ được phát hiện
     
     Args:
         results: List các kết quả detection và classification
         detection_confidences: List các confidence từ object detection
     
     Returns:
-        str: Text mô tả vấn đề sức khỏe hoặc None nếu confidence thấp
+        str: Text mô tả đầy đủ tất cả vấn đề sức khỏe hoặc None nếu confidence thấp
     """
     if not results:
         return None
     
-    # Thu thập tất cả các vấn đề được phát hiện
-    diseases = []  # (result, confidence, detection_conf)
-    cosmetics = []  # (result, confidence, detected_class)
+    # Thu thập TẤT CẢ các vấn đề được phát hiện
+    diseases = []  # (class_name, combined_confidence, detection_conf, description)
+    cosmetics = []  # (detected_class, detection_conf, description)
     
     for i, result in enumerate(results):
         detected_class = result.get('detected_class', '')
@@ -611,69 +611,72 @@ def generate_health_issue_info(results, detection_confidences):
                 # Tính confidence tổng hợp (trung bình có trọng số)
                 combined_confidence = (classification_conf * 0.6 + detection_conf * 0.4)
                 
+                # Thêm tất cả bệnh có confidence >= MEDIUM_CONFIDENCE_THRESHOLD và khác 'none'
                 if combined_confidence >= MEDIUM_CONFIDENCE_THRESHOLD and class_name != 'none':
-                    diseases.append((result, combined_confidence, detection_conf))
+                    disease_info = DISEASE_INFO.get(class_name, DISEASE_INFO['none'])
+                    disease_name_vi = disease_info['name_vi']
+                    description = disease_info['description']
+                    diseases.append((class_name, combined_confidence, detection_conf, disease_name_vi, description))
         else:
             # Xử lý vấn đề thẩm mỹ/thông thường (chỉ có detection)
             if detection_conf >= MEDIUM_CONFIDENCE_THRESHOLD:
                 cosmetic_info = COSMETIC_ISSUES.get(detected_class)
                 if cosmetic_info:
-                    cosmetics.append((result, detection_conf, detected_class))
+                    issue_name_vi = cosmetic_info['name_vi']
+                    description = cosmetic_info['description']
+                    cosmetics.append((detected_class, detection_conf, issue_name_vi, description))
     
-    # Tạo text mô tả - xử lý đầy đủ tất cả các trường hợp
+    # Tạo text mô tả - hiển thị TẤT CẢ các vấn đề
     text_parts = []
     
     # Sắp xếp theo confidence
     diseases.sort(key=lambda x: x[1], reverse=True)
     cosmetics.sort(key=lambda x: x[1], reverse=True)
     
-    # Trường hợp 1: Có bệnh da liễu
+    # Trường hợp 1: Có bệnh da liễu - hiển thị TẤT CẢ các bệnh được phát hiện
     if diseases:
-        best_disease = diseases[0]
-        disease_pred = best_disease[0].get('disease_prediction', {})
-        class_name = disease_pred.get('class_name', 'none')
-        disease_info = DISEASE_INFO.get(class_name, DISEASE_INFO['none'])
-        disease_name_vi = disease_info['name_vi']
-        description = disease_info['description']
-        confidence = best_disease[1]
+        # Thêm bệnh da liễu chính (confidence cao nhất)
+        first_disease = diseases[0]
+        disease_name_vi = first_disease[3]
+        description = first_disease[4]
+        confidence = first_disease[1]
         
         text_parts.append(f"Bạn có thể đang gặp vấn đề về: {disease_name_vi} ({confidence*100:.1f}%). {description}")
         
-        # Nếu có vấn đề thẩm mỹ kèm theo, thêm vào với "Ngoài ra"
+        # Thêm tất cả các bệnh da liễu khác được phát hiện
+        for disease in diseases[1:]:
+            disease_name_vi = disease[3]
+            description = disease[4]
+            confidence = disease[1]
+            
+            text_parts.append(f"Ngoài ra, cũng phát hiện: {disease_name_vi} ({confidence*100:.1f}%). {description}")
+        
+        # Nếu có vấn đề thẩm mỹ kèm theo, thêm vào
         if cosmetics:
-            for idx, cosmetic in enumerate(cosmetics[:2]):  # Tối đa 2 vấn đề thẩm mỹ
-                detected_class = cosmetic[2]
-                cosmetic_info = COSMETIC_ISSUES.get(detected_class)
-                if cosmetic_info:
-                    issue_name_vi = cosmetic_info['name_vi']
-                    description = cosmetic_info['description']
-                    confidence = cosmetic[1]
-                    
-                    text_parts.append(f"Ngoài ra, phát hiện vấn đề về: {issue_name_vi} ({confidence*100:.1f}%). {description}")
+            for cosmetic in cosmetics:
+                issue_name_vi = cosmetic[2]
+                description = cosmetic[3]
+                confidence = cosmetic[1]
+                
+                text_parts.append(f"Thêm vào đó, phát hiện vấn đề thẩm mỹ: {issue_name_vi} ({confidence*100:.1f}%). {description}")
     
     # Trường hợp 2: Chỉ có vấn đề thẩm mỹ (không có bệnh da liễu)
     elif cosmetics:
-        # Vấn đề thẩm mỹ đầu tiên - không dùng "Ngoài ra"
+        # Vấn đề thẩm mỹ đầu tiên
         first_cosmetic = cosmetics[0]
-        detected_class = first_cosmetic[2]
-        cosmetic_info = COSMETIC_ISSUES.get(detected_class)
-        if cosmetic_info:
-            issue_name_vi = cosmetic_info['name_vi']
-            description = cosmetic_info['description']
-            confidence = first_cosmetic[1]
-            
-            text_parts.append(f"Phát hiện vấn đề về: {issue_name_vi} ({confidence*100:.1f}%). {description}")
+        issue_name_vi = first_cosmetic[2]
+        description = first_cosmetic[3]
+        confidence = first_cosmetic[1]
         
-        # Các vấn đề thẩm mỹ tiếp theo - dùng "Ngoài ra"
-        for cosmetic in cosmetics[1:3]:  # Tối đa 2 vấn đề nữa (tổng tối đa 3)
-            detected_class = cosmetic[2]
-            cosmetic_info = COSMETIC_ISSUES.get(detected_class)
-            if cosmetic_info:
-                issue_name_vi = cosmetic_info['name_vi']
-                description = cosmetic_info['description']
-                confidence = cosmetic[1]
-                
-                text_parts.append(f"Ngoài ra, phát hiện vấn đề về: {issue_name_vi} ({confidence*100:.1f}%). {description}")
+        text_parts.append(f"Phát hiện vấn đề về: {issue_name_vi} ({confidence*100:.1f}%). {description}")
+        
+        # Tất cả các vấn đề thẩm mỹ khác
+        for cosmetic in cosmetics[1:]:
+            issue_name_vi = cosmetic[2]
+            description = cosmetic[3]
+            confidence = cosmetic[1]
+            
+            text_parts.append(f"Ngoài ra, phát hiện vấn đề: {issue_name_vi} ({confidence*100:.1f}%). {description}")
     
     if not text_parts:
         return None
@@ -683,15 +686,15 @@ def generate_health_issue_info(results, detection_confidences):
 
 def generate_lifestyle_suggestions(results, detection_confidences):
     """
-    Tạo gợi ý về lối sống và ăn uống dựa trên các vấn đề được phát hiện
-    Kết hợp gợi ý từ cả bệnh da liễu và vấn đề thẩm mỹ
+    Tạo gợi ý về lối sống và ăn uống dựa trên TẤT CẢ các vấn đề được phát hiện
+    Kết hợp gợi ý từ cả tất cả bệnh da liễu và tất cả vấn đề thẩm mỹ
     
     Args:
         results: List các kết quả detection và classification
         detection_confidences: List các confidence từ object detection
     
     Returns:
-        dict: Dictionary chứa lifestyle và diet suggestions
+        dict: Dictionary chứa lifestyle và diet suggestions từ tất cả vấn đề
     """
     if not results:
         return {
@@ -699,7 +702,7 @@ def generate_lifestyle_suggestions(results, detection_confidences):
             "diet": DISEASE_INFO['none']['diet']
         }
     
-    # Thu thập tất cả các vấn đề được phát hiện
+    # Thu thập TẤT CẢ các vấn đề được phát hiện
     diseases = []  # (class_name, confidence)
     cosmetics = []  # (detected_class, confidence)
     
@@ -716,6 +719,7 @@ def generate_lifestyle_suggestions(results, detection_confidences):
                 classification_conf = disease_pred.get('confidence', 0)
                 combined_confidence = (classification_conf * 0.6 + detection_conf * 0.4)
                 
+                # Thêm TẤT CẢ bệnh có confidence >= MEDIUM_CONFIDENCE_THRESHOLD
                 if combined_confidence >= MEDIUM_CONFIDENCE_THRESHOLD and class_name != 'none':
                     diseases.append((class_name, combined_confidence))
         else:
@@ -725,70 +729,56 @@ def generate_lifestyle_suggestions(results, detection_confidences):
                 if cosmetic_info:
                     cosmetics.append((detected_class, detection_conf))
     
-    # Bắt đầu với gợi ý từ bệnh da liễu (nếu có) hoặc vấn đề thẩm mỹ
+    # Kết hợp gợi ý từ TẤT CẢ các vấn đề
     lifestyle = []
     diet = []
     
     if diseases:
-        # Ưu tiên bệnh da liễu - lấy bệnh có confidence cao nhất
+        # Sắp xếp theo confidence
         diseases.sort(key=lambda x: x[1], reverse=True)
-        primary_disease = diseases[0][0]
-        disease_info = DISEASE_INFO.get(primary_disease, DISEASE_INFO['none'])
         
-        lifestyle = disease_info['lifestyle'].copy()
-        diet = disease_info['diet'].copy()
+        # Thêm gợi ý từ TẤT CẢ các bệnh da liễu
+        for disease_name, confidence in diseases:
+            disease_info = DISEASE_INFO.get(disease_name, DISEASE_INFO['none'])
+            
+            # Thêm tất cả gợi ý từ mỗi bệnh (tránh trùng lặp)
+            for suggestion in disease_info['lifestyle']:
+                if suggestion not in lifestyle:
+                    lifestyle.append(suggestion)
+            
+            for suggestion in disease_info['diet']:
+                if suggestion not in diet:
+                    diet.append(suggestion)
         
         # Thêm gợi ý chung
-        lifestyle.append("Nên tham khảo ý kiến bác sĩ da liễu để có chẩn đoán chính xác")
-        diet.append("Duy trì chế độ ăn cân bằng và lành mạnh")
-        
-        # Thêm gợi ý từ vấn đề thẩm mỹ (nếu có) - lấy tối đa 2 vấn đề có confidence cao nhất
-        if cosmetics:
-            cosmetics.sort(key=lambda x: x[1], reverse=True)
-            for cosmetic in cosmetics[:2]:
-                detected_class = cosmetic[0]
-                cosmetic_info = COSMETIC_ISSUES.get(detected_class)
-                if cosmetic_info:
-                    # Thêm một số gợi ý quan trọng từ vấn đề thẩm mỹ (tránh trùng lặp)
-                    cosmetic_lifestyle = cosmetic_info['lifestyle']
-                    cosmetic_diet = cosmetic_info['diet']
-                    
-                    # Thêm 3-4 gợi ý quan trọng nhất từ vấn đề thẩm mỹ
-                    for suggestion in cosmetic_lifestyle[:4]:
-                        if suggestion not in lifestyle:
-                            lifestyle.append(suggestion)
-                    
-                    for suggestion in cosmetic_diet[:4]:
-                        if suggestion not in diet:
-                            diet.append(suggestion)
-    elif cosmetics:
-        # Nếu không có bệnh da liễu, dùng gợi ý từ vấn đề thẩm mỹ
+        if "Nên tham khảo ý kiến bác sĩ da liễu để có chẩn đoán chính xác" not in lifestyle:
+            lifestyle.append("Nên tham khảo ý kiến bác sĩ da liễu để có chẩn đoán chính xác")
+    
+    # Thêm gợi ý từ TẤT CẢ vấn đề thẩm mỹ
+    if cosmetics:
         cosmetics.sort(key=lambda x: x[1], reverse=True)
-        primary_cosmetic = cosmetics[0][0]
-        cosmetic_info = COSMETIC_ISSUES.get(primary_cosmetic)
         
-        if cosmetic_info:
-            # Lấy toàn bộ gợi ý từ vấn đề thẩm mỹ chính
-            lifestyle = cosmetic_info['lifestyle'].copy()
-            diet = cosmetic_info['diet'].copy()
+        for detected_class, confidence in cosmetics:
+            cosmetic_info = COSMETIC_ISSUES.get(detected_class)
             
-            # Thêm gợi ý từ các vấn đề thẩm mỹ khác (nếu có nhiều vấn đề)
-            # Lấy tối đa 3 vấn đề thẩm mỹ để kết hợp gợi ý
-            for cosmetic in cosmetics[1:3]:  # Tối đa 2 vấn đề nữa (tổng tối đa 3)
-                detected_class = cosmetic[0]
-                other_cosmetic_info = COSMETIC_ISSUES.get(detected_class)
-                if other_cosmetic_info:
-                    # Thêm 4-5 gợi ý quan trọng nhất từ mỗi vấn đề thẩm mỹ khác
-                    for suggestion in other_cosmetic_info['lifestyle'][:5]:
-                        if suggestion not in lifestyle:
-                            lifestyle.append(suggestion)
-                    
-                    for suggestion in other_cosmetic_info['diet'][:5]:
-                        if suggestion not in diet:
-                            diet.append(suggestion)
+            if cosmetic_info:
+                # Thêm tất cả gợi ý từ mỗi vấn đề thẩm mỹ (tránh trùng lặp)
+                for suggestion in cosmetic_info['lifestyle']:
+                    if suggestion not in lifestyle:
+                        lifestyle.append(suggestion)
+                
+                for suggestion in cosmetic_info['diet']:
+                    if suggestion not in diet:
+                        diet.append(suggestion)
+    
+    # Thêm gợi ý chung cuối cùng
+    if not diet:
+        diet.append("Duy trì chế độ ăn cân bằng và lành mạnh")
+    if not lifestyle:
+        lifestyle.append("Tiếp tục chăm sóc da hàng ngày")
     
     # Nếu không có vấn đề nào, dùng gợi ý chung
-    if not lifestyle and not diet:
+    if not diseases and not cosmetics:
         return {
             "lifestyle": DISEASE_INFO['none']['lifestyle'],
             "diet": DISEASE_INFO['none']['diet']
