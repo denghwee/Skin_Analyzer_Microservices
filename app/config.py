@@ -9,6 +9,15 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # Prevent Railway DB timeout
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 280,
+        "pool_timeout": 30,
+        "pool_size": 5,
+        "max_overflow": 10
+    }
+
     # ======= AI MODEL CONFIG =======
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
