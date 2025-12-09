@@ -13,7 +13,10 @@ COPY . .
 
 ENV PYTHONUNBUFFERED=1
 ENV PORT=5000
+ENV WORKERS=1
+ENV APP_MODULE=wsgi:app
+ENV GUNICORN_TIMEOUT=300
 
 EXPOSE 5000
 
-CMD ["sh", "-c", "gunicorn app:app --bind 0.0.0.0:${PORT} --timeout 300"]
+CMD ["sh", "-c", "gunicorn --workers ${WORKERS:-1} --bind 0.0.0.0:${PORT} --timeout ${GUNICORN_TIMEOUT:-300} ${APP_MODULE}"]
