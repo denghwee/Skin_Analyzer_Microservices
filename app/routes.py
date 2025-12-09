@@ -7,6 +7,12 @@ from PIL import Image
 from .config import Config
 from .food_nutrition import calculate_total_nutrition
 from .health_info import generate_health_issue_info, generate_lifestyle_suggestions
+from .config import Config
+from PIL import Image
+import io
+from datetime import datetime
+from app.utils import upload_base64_to_cloudinary
+from app.config import Config
 from .service_clients import (
     ServiceCallError,
     call_classification_service,
@@ -41,9 +47,13 @@ def register_routes(app):
         detections = deduplicate_by_label(detections)
         
         if not detections:
+            # No detection → VẪN UPLOAD ẢNH GỐC lên Cloudinary
+            encoded = image_to_base64(image)
+            cloud_url = upload_base64_to_cloudinary(encoded)
+
             return jsonify({
                 'status': 'success',
-                'annotated_image_base64': image_to_base64(image),
+                'annotated_image_url': cloud_url,
                 'detection': [],
                 'health_issue_info': None,
                 'lifestyle_suggestions': {
@@ -61,19 +71,22 @@ def register_routes(app):
                 }
             })
 
+        # Có detection → xử lý crop & classification
         cropped_images = crop_regions(image, detections)
 
         results = []
         detection_confidences = []
+
         for crop, det in zip(cropped_images, detections):
             detected_class = det['class']
             detection_conf = float(det['confidence'])
             detection_confidences.append(detection_conf)
-            
-            # Chỉ đưa vào classification nếu là bệnh da liễu thực sự
+
             requires_classification = detected_class in Config.CLASSES_REQUIRING_CLASSIFICATION
-            
+
+            # Nếu là bệnh thật → gọi classification
             if requires_classification:
+                disease_pred = classify_image(crop)
                 # Gọi classification service cho các bệnh da liễu
                 try:
                     disease_pred = call_classification_service(crop)
@@ -92,7 +105,6 @@ def register_routes(app):
                     'requires_classification': True
                 })
             else:
-                # Chỉ có detection, không cần classification
                 results.append({
                     'detected_class': detected_class,
                     'confidence': detection_conf,
@@ -101,14 +113,20 @@ def register_routes(app):
                     'requires_classification': False
                 })
 
+        # Vẽ bounding boxes lên ảnh
         image_with_boxes = draw_boxes(image.copy(), detections)
-        encoded_img = image_to_base64(image_with_boxes)
 
-        # Tạo thông tin sức khỏe và gợi ý
+        # Convert annotated image → base64
+        annotated_base64 = image_to_base64(image_with_boxes)
+
+        # UPLOAD TO CLOUDINARY 🚀
+        cloud_url = upload_base64_to_cloudinary(annotated_base64)
+
+        # Health info + suggestions
         health_issue_info = generate_health_issue_info(results, detection_confidences)
         lifestyle_suggestions = generate_lifestyle_suggestions(results, detection_confidences)
 
-        # Metadata cho LLM + RAG
+        # Metadata
         timestamp = datetime.now().isoformat()
         metadata = {
             'timestamp': timestamp,
@@ -120,9 +138,11 @@ def register_routes(app):
             'detection_summary': [
                 {
                     'detected_class': r['detected_class'],
-                    'disease': r['disease_prediction'].get('class_name', 'unknown') if r.get('disease_prediction') else None,
+                    'disease': r['disease_prediction'].get('class_name', 'unknown') if r.get(
+                        'disease_prediction') else None,
                     'detection_confidence': r['confidence'],
-                    'classification_confidence': r['disease_prediction'].get('confidence', 0) if r.get('disease_prediction') else None,
+                    'classification_confidence': r['disease_prediction'].get('confidence', 0) if r.get(
+                        'disease_prediction') else None,
                     'requires_classification': r.get('requires_classification', False)
                 }
                 for r in results
@@ -131,7 +151,7 @@ def register_routes(app):
 
         return jsonify({
             'status': 'success',
-            'annotated_image_base64': encoded_img,
+            'annotated_image_url': cloud_url,  # ⭐⭐⭐ KHÔNG GỬI BASE64 NỮA
             'detection': results,
             'health_issue_info': health_issue_info,
             'lifestyle_suggestions': lifestyle_suggestions,
@@ -247,3 +267,6 @@ def register_routes(app):
                 'threshold': threshold
             }
         })
+
+    from app.controllers.analysis_controller import analysis_blueprint
+    app.register_blueprint(analysis_blueprint, url_prefix="/api/analysis")
