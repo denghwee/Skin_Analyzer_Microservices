@@ -11,8 +11,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 200,
             "Fat": 7,
-            "Carbs": 25,
-            "Protein": 6
+            "Saturates": 1.5,
+            "Sugar": 2,
+            "Salt": 0.7
         }
     },
     {
@@ -22,8 +23,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 600,
             "Fat": 10,
-            "Carbs": 100,
-            "Protein": 8
+            "Saturates": 3,
+            "Sugar": 1,
+            "Salt": 1.2
         }
     },
     {
@@ -33,8 +35,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 300,
             "Fat": 8,
-            "Carbs": 45,
-            "Protein": 7
+            "Saturates": 2,
+            "Sugar": 2,
+            "Salt": 0.8
         }
     },
     {
@@ -44,8 +47,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 400,
             "Fat": 15,
-            "Carbs": 50,
-            "Protein": 6
+            "Saturates": 3,
+            "Sugar": 3,
+            "Salt": 1
         }
     },
     {
@@ -55,8 +59,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 350,
             "Fat": 12,
-            "Carbs": 45,
-            "Protein": 12
+            "Saturates": 4,
+            "Sugar": 4,
+            "Salt": 1.5
         }
     },
     {
@@ -66,8 +71,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 300,
             "Fat": 0.5,
-            "Carbs": 78,
-            "Protein": 2
+            "Saturates": 0.1,
+            "Sugar": 0,
+            "Salt": 0.2
         }
     },
     {
@@ -77,8 +83,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 250,
             "Fat": 10,
-            "Carbs": 30,
-            "Protein": 5
+            "Saturates": 1.5,
+            "Sugar": 3,
+            "Salt": 1
         }
     },
     {
@@ -88,8 +95,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 400,
             "Fat": 16,
-            "Carbs": 48,
-            "Protein": 8
+            "Saturates": 4,
+            "Sugar": 3,
+            "Salt": 1.5
         }
     },
     {
@@ -99,8 +107,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 450,
             "Fat": 20,
-            "Carbs": 35,
-            "Protein": 30
+            "Saturates": 8,
+            "Sugar": 5,
+            "Salt": 2
         }
     },
     {
@@ -110,8 +119,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 300,
             "Fat": 12,
-            "Carbs": 15,
-            "Protein": 35
+            "Saturates": 4,
+            "Sugar": 2,
+            "Salt": 1
         }
     },
     {
@@ -121,8 +131,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 25,
             "Fat": 0.1,
-            "Carbs": 5,
-            "Protein": 2
+            "Saturates": 0,
+            "Sugar": 2,
+            "Salt": 0
         }
     },
     {
@@ -132,8 +143,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 110,
             "Fat": 0.5,
-            "Carbs": 23,
-            "Protein": 3
+            "Saturates": 0.1,
+            "Sugar": 0.5,
+            "Salt": 0.1
         }
     },
     {
@@ -143,8 +155,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 500,
             "Fat": 15,
-            "Carbs": 60,
-            "Protein": 25
+            "Saturates": 5,
+            "Sugar": 4,
+            "Salt": 2.5
         }
     },
     {
@@ -154,8 +167,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 550,
             "Fat": 25,
-            "Carbs": 55,
-            "Protein": 30
+            "Saturates": 8,
+            "Sugar": 6,
+            "Salt": 2.5
         }
     },
     {
@@ -165,8 +179,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 400,
             "Fat": 20,
-            "Carbs": 40,
-            "Protein": 18
+            "Saturates": 3.5,
+            "Sugar": 4,
+            "Salt": 1.8
         }
     },
     {
@@ -176,8 +191,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 600,
             "Fat": 20,
-            "Carbs": 70,
-            "Protein": 28
+            "Saturates": 5,
+            "Sugar": 6,
+            "Salt": 2.5
         }
     },
     {
@@ -187,8 +203,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 500,
             "Fat": 18,
-            "Carbs": 60,
-            "Protein": 22
+            "Saturates": 4,
+            "Sugar": 4,
+            "Salt": 2.2
         }
     },
     {
@@ -198,8 +215,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 150,
             "Fat": 4,
-            "Carbs": 0,
-            "Protein": 28
+            "Saturates": 1,
+            "Sugar": 0,
+            "Salt": 0.5
         }
     },
     {
@@ -209,8 +227,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 18,
             "Fat": 0.2,
-            "Carbs": 3.9,
-            "Protein": 0.9
+            "Saturates": 0,
+            "Sugar": 2.6,
+            "Salt": 0
         }
     },
     {
@@ -220,8 +239,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 30,
             "Fat": 0.2,
-            "Carbs": 6,
-            "Protein": 1
+            "Saturates": 0,
+            "Sugar": 2,
+            "Salt": 0.6
         }
     },
     {
@@ -231,8 +251,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 41,
             "Fat": 0.2,
-            "Carbs": 10,
-            "Protein": 0.9
+            "Saturates": 0,
+            "Sugar": 4.7,
+            "Salt": 0
         }
     },
     {
@@ -242,8 +263,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 100,
             "Fat": 3,
-            "Carbs": 12,
-            "Protein": 5
+            "Saturates": 0.5,
+            "Sugar": 2,
+            "Salt": 0.8
         }
     },
     {
@@ -253,8 +275,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 250,
             "Fat": 20,
-            "Carbs": 2,
-            "Protein": 20
+            "Saturates": 7,
+            "Sugar": 1,
+            "Salt": 1.2
         }
     },
     {
@@ -264,8 +287,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 150,
             "Fat": 8,
-            "Carbs": 15,
-            "Protein": 6
+            "Saturates": 2,
+            "Sugar": 1,
+            "Salt": 0.5
         }
     },
     {
@@ -275,8 +299,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 30,
             "Fat": 0.2,
-            "Carbs": 11,
-            "Protein": 1.1
+            "Saturates": 0,
+            "Sugar": 1.7,
+            "Salt": 0.03
         }
     },
     {
@@ -286,8 +311,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 130,
             "Fat": 0.3,
-            "Carbs": 28,
-            "Protein": 2.7
+            "Saturates": 0,
+            "Sugar": 0,
+            "Salt": 0
         }
     },
     {
@@ -297,8 +323,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 150,
             "Fat": 0.5,
-            "Carbs": 32,
-            "Protein": 3
+            "Saturates": 0,
+            "Sugar": 0,
+            "Salt": 0.02
         }
     },
     {
@@ -308,8 +335,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 0,
             "Fat": 0,
-            "Carbs": 0,
-            "Protein": 0
+            "Saturates": 0,
+            "Sugar": 0,
+            "Salt": 0
         }
     },
     {
@@ -319,8 +347,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 20,
             "Fat": 0.1,
-            "Carbs": 4,
-            "Protein": 1
+            "Saturates": 0,
+            "Sugar": 1,
+            "Salt": 1
         }
     },
     {
@@ -330,8 +359,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 97,
             "Fat": 1.5,
-            "Carbs": 0,
-            "Protein": 20
+            "Saturates": 0.2,
+            "Sugar": 0,
+            "Salt": 0.4
         }
     },
     {
@@ -341,8 +371,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 76,
             "Fat": 4.8,
-            "Carbs": 1.9,
-            "Protein": 8.1
+            "Saturates": 0.7,
+            "Sugar": 0.3,
+            "Salt": 0.01
         }
     },
     {
@@ -352,8 +383,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 25,
             "Fat": 0.1,
-            "Carbs": 5,
-            "Protein": 1.5
+            "Saturates": 0,
+            "Sugar": 2,
+            "Salt": 1.5
         }
     },
     {
@@ -363,8 +395,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 16,
             "Fat": 0.1,
-            "Carbs": 3.6,
-            "Protein": 0.7
+            "Saturates": 0,
+            "Sugar": 1.7,
+            "Salt": 0
         }
     },
     {
@@ -374,8 +407,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 100,
             "Fat": 2,
-            "Carbs": 18,
-            "Protein": 4
+            "Saturates": 0.5,
+            "Sugar": 1,
+            "Salt": 0.5
         }
     },
     {
@@ -385,8 +419,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 350,
             "Fat": 20,
-            "Carbs": 30,
-            "Protein": 15
+            "Saturates": 8,
+            "Sugar": 5,
+            "Salt": 1.8
         }
     },
     {
@@ -396,8 +431,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 330,
             "Fat": 28,
-            "Carbs": 0,
-            "Protein": 25
+            "Saturates": 10,
+            "Sugar": 0,
+            "Salt": 1.1
         }
     },
     {
@@ -407,8 +443,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 400,
             "Fat": 10,
-            "Carbs": 55,
-            "Protein": 15
+            "Saturates": 2,
+            "Sugar": 3,
+            "Salt": 2
         }
     },
     {
@@ -418,8 +455,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 250,
             "Fat": 7,
-            "Carbs": 30,
-            "Protein": 16
+            "Saturates": 2,
+            "Sugar": 2,
+            "Salt": 1.3
         }
     },
     {
@@ -429,8 +467,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 312,
             "Fat": 15,
-            "Carbs": 37,
-            "Protein": 4
+            "Saturates": 2,
+            "Sugar": 0.4,
+            "Salt": 0.5
         }
     },
     {
@@ -440,8 +479,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 600,
             "Fat": 20,
-            "Carbs": 70,
-            "Protein": 28
+            "Saturates": 5,
+            "Sugar": 4,
+            "Salt": 3
         }
     },
     {
@@ -451,8 +491,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 250,
             "Fat": 20,
-            "Carbs": 0,
-            "Protein": 20
+            "Saturates": 7,
+            "Sugar": 0,
+            "Salt": 0.9
         }
     },
     {
@@ -462,8 +503,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 138,
             "Fat": 2,
-            "Carbs": 25,
-            "Protein": 5
+            "Saturates": 0.5,
+            "Sugar": 0.2,
+            "Salt": 0.6
         }
     },
     {
@@ -473,8 +515,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 92,
             "Fat": 1.4,
-            "Carbs": 3.1,
-            "Protein": 16
+            "Saturates": 0.5,
+            "Sugar": 0,
+            "Salt": 0.3
         }
     },
     {
@@ -484,8 +527,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 22,
             "Fat": 0.1,
-            "Carbs": 3.3,
-            "Protein": 3.1
+            "Saturates": 0,
+            "Sugar": 1.8,
+            "Salt": 0.01
         }
     },
     {
@@ -495,8 +539,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 79,
             "Fat": 1.4,
-            "Carbs": 2,
-            "Protein": 14
+            "Saturates": 0.3,
+            "Sugar": 0,
+            "Salt": 0.4
         }
     },
     {
@@ -506,8 +551,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 20,
             "Fat": 0.2,
-            "Carbs": 4.6,
-            "Protein": 1
+            "Saturates": 0,
+            "Sugar": 4.2,
+            "Salt": 0.02
         }
     },
     {
@@ -517,8 +563,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 450,
             "Fat": 15,
-            "Carbs": 55,
-            "Protein": 20
+            "Saturates": 5,
+            "Sugar": 3,
+            "Salt": 1.8
         }
     },
     {
@@ -528,8 +575,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 400,
             "Fat": 33,
-            "Carbs": 1.3,
-            "Protein": 25
+            "Saturates": 21,
+            "Sugar": 1.5,
+            "Salt": 1.8
         }
     },
     {
@@ -539,8 +587,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 25,
             "Fat": 0.2,
-            "Carbs": 5,
-            "Protein": 2
+            "Saturates": 0,
+            "Sugar": 2,
+            "Salt": 0.02
         }
     },
     {
@@ -550,8 +599,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 150,
             "Fat": 10,
-            "Carbs": 12,
-            "Protein": 4
+            "Saturates": 2,
+            "Sugar": 2,
+            "Salt": 0.6
         }
     },
     {
@@ -561,8 +611,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 250,
             "Fat": 15,
-            "Carbs": 0,
-            "Protein": 26
+            "Saturates": 6,
+            "Sugar": 0,
+            "Salt": 0.5
         }
     },
     {
@@ -572,8 +623,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 239,
             "Fat": 13.6,
-            "Carbs": 0,
-            "Protein": 27
+            "Saturates": 3.8,
+            "Sugar": 0,
+            "Salt": 0.7
         }
     },
     {
@@ -583,8 +635,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 242,
             "Fat": 14,
-            "Carbs": 0,
-            "Protein": 27
+            "Saturates": 5,
+            "Sugar": 0,
+            "Salt": 0.6
         }
     },
     {
@@ -594,8 +647,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 500,
             "Fat": 30,
-            "Carbs": 30,
-            "Protein": 25
+            "Saturates": 10,
+            "Sugar": 5,
+            "Salt": 2
         }
     },
     {
@@ -605,8 +659,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 400,
             "Fat": 20,
-            "Carbs": 20,
-            "Protein": 35
+            "Saturates": 7,
+            "Sugar": 3,
+            "Salt": 1.5
         }
     },
     {
@@ -616,8 +671,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 99,
             "Fat": 1,
-            "Carbs": 0,
-            "Protein": 24
+            "Saturates": 0.3,
+            "Sugar": 0,
+            "Salt": 0.4
         }
     },
     {
@@ -627,8 +683,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 155,
             "Fat": 11,
-            "Carbs": 1.1,
-            "Protein": 13
+            "Saturates": 3.3,
+            "Sugar": 1.1,
+            "Salt": 0.12
         }
     },
     {
@@ -638,8 +695,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 180,
             "Fat": 0.3,
-            "Carbs": 40,
-            "Protein": 3
+            "Saturates": 0,
+            "Sugar": 0.1,
+            "Salt": 0.04
         }
     },
     {
@@ -649,8 +707,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 120,
             "Fat": 4,
-            "Carbs": 18,
-            "Protein": 3
+            "Saturates": 1,
+            "Sugar": 1.5,
+            "Salt": 0.3
         }
     },
     {
@@ -660,8 +719,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 350,
             "Fat": 10,
-            "Carbs": 50,
-            "Protein": 10
+            "Saturates": 2.5,
+            "Sugar": 2,
+            "Salt": 1.4
         }
     },
     {
@@ -671,8 +731,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 400,
             "Fat": 12,
-            "Carbs": 55,
-            "Protein": 12
+            "Saturates": 3,
+            "Sugar": 3,
+            "Salt": 1.8
         }
     },
     {
@@ -682,8 +743,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 600,
             "Fat": 20,
-            "Carbs": 75,
-            "Protein": 15
+            "Saturates": 4,
+            "Sugar": 4,
+            "Salt": 2.2
         }
     },
     {
@@ -693,8 +755,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 500,
             "Fat": 15,
-            "Carbs": 60,
-            "Protein": 20
+            "Saturates": 4,
+            "Sugar": 3,
+            "Salt": 1.9
         }
     },
     {
@@ -704,8 +767,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 700,
             "Fat": 25,
-            "Carbs": 80,
-            "Protein": 25
+            "Saturates": 5,
+            "Sugar": 4,
+            "Salt": 2.5
         }
     },
     {
@@ -715,8 +779,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 400,
             "Fat": 10,
-            "Carbs": 50,
-            "Protein": 20
+            "Saturates": 2,
+            "Sugar": 1.5,
+            "Salt": 1.2
         }
     },
     {
@@ -726,8 +791,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 150,
             "Fat": 7,
-            "Carbs": 18,
-            "Protein": 4
+            "Saturates": 1,
+            "Sugar": 2,
+            "Salt": 1
         }
     },
     {
@@ -737,8 +803,9 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 550,
             "Fat": 18,
-            "Carbs": 60,
-            "Protein": 28
+            "Saturates": 6,
+            "Sugar": 3,
+            "Salt": 2.1
         }
     },
     {
@@ -748,15 +815,15 @@ FOOD_NUTRITION_DB = [
         "nutrition": {
             "Calories": 200,
             "Fat": 5,
-            "Carbs": 25,
-            "Protein": 15
+            "Saturates": 1,
+            "Sugar": 1.5,
+            "Salt": 0.9
         }
     }
 ]
 def get_nutrition_by_name(food_name: str) -> dict:
     """
     Lấy thông tin dinh dưỡng của một món ăn dựa trên tên.
-    Tên phải trùng 100% (exact match, case-insensitive).
     
     Args:
         food_name: Tên của món ăn (class label từ YOLO detection)
@@ -770,8 +837,34 @@ def get_nutrition_by_name(food_name: str) -> dict:
     for food_item in FOOD_NUTRITION_DB:
         item_name = food_item['name'].lower()
         
-        # Exact match (case-insensitive)
+        # Try multiple matching strategies:
+        # 1. Exact match (sau khi lowercase)
         if item_name == normalized_name:
+            return {
+                'name': food_item['name'],
+                'serving_type': food_item['serving_type'],
+                'nutrition': food_item['nutrition']
+            }
+        
+        # 2. Item name starts with detection name (e.g., "Mi (Egg noodles)" starts with "Mi")
+        if item_name.startswith(normalized_name):
+            return {
+                'name': food_item['name'],
+                'serving_type': food_item['serving_type'],
+                'nutrition': food_item['nutrition']
+            }
+        
+        # 3. Detection name is in item name (e.g., "Mi" in "Mi (Egg noodles)")
+        if normalized_name in item_name:
+            return {
+                'name': food_item['name'],
+                'serving_type': food_item['serving_type'],
+                'nutrition': food_item['nutrition']
+            }
+        
+        # 4. First word of item name matches (e.g., "Mi" from "Mi (Egg noodles)")
+        first_word = item_name.split()[0] if item_name.split() else ""
+        if first_word == normalized_name:
             return {
                 'name': food_item['name'],
                 'serving_type': food_item['serving_type'],
@@ -794,8 +887,9 @@ def calculate_total_nutrition(detections: list) -> dict:
     total_nutrition = {
         'Calories': 0,
         'Fat': 0,
-        'Carbs': 0,
-        'Protein': 0
+        'Saturates': 0,
+        'Sugar': 0,
+        'Salt': 0
     }
     
     nutrition_details = []

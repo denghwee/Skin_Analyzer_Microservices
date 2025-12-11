@@ -268,8 +268,9 @@
                     <th>Serving Type</th>
                     <th>Calories</th>
                     <th>Fat (g)</th>
-                    <th>Carbs (g)</th>
-                    <th>Protein (g)</th>
+                    <th>Saturates (g)</th>
+                    <th>Sugar (g)</th>
+                    <th>Salt (g)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -282,8 +283,9 @@
                 <td>${item.serving_type}</td>
                 <td>${nut.Calories}</td>
                 <td>${nut.Fat}</td>
-                <td>${nut.Carbs}</td>
-                <td>${nut.Protein}</td>
+                <td>${nut.Saturates}</td>
+                <td>${nut.Sugar}</td>
+                <td>${nut.Salt}</td>
               </tr>
             `;
           });
@@ -313,12 +315,16 @@
                     <td>${total.Fat.toFixed(1)}</td>
                   </tr>
                   <tr>
-                    <td>Carbohydrates (g)</td>
-                    <td>${total.Carbs.toFixed(1)}</td>
+                    <td>Saturated Fat (g)</td>
+                    <td>${total.Saturates.toFixed(1)}</td>
                   </tr>
                   <tr>
-                    <td>Protein (g)</td>
-                    <td>${total.Protein.toFixed(1)}</td>
+                    <td>Sugar (g)</td>
+                    <td>${total.Sugar.toFixed(1)}</td>
+                  </tr>
+                  <tr>
+                    <td>Salt (g)</td>
+                    <td>${total.Salt.toFixed(1)}</td>
                   </tr>
                 </tbody>
               </table>
