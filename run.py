@@ -1,7 +1,11 @@
-from dotenv import load_dotenv
-load_dotenv()
-from app import create_app
 import os
+if os.environ.get("RENDER"):   # Render set biến môi trường RENDER = true
+    pass  # không cần load dotenv trên cloud
+else:
+    from dotenv import load_dotenv
+    load_dotenv()
+from app import create_app
+
 
 app = create_app()   # <-- tạo app từ factory
 
