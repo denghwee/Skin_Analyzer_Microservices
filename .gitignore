@@ -28,12 +28,12 @@ share/python-wheels/
 MANIFEST
 
 # Model files (large, should not be in git)
-# *.pt
-# *.pth
-# *.h5
-# *.onnx
-# *.pb
-# *.tflite
+*.pt
+*.pth
+*.h5
+*.onnx
+*.pb
+*.tflite
 
 # IDE
 .vscode/
