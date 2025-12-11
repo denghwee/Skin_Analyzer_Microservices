@@ -7,19 +7,13 @@ from PIL import Image
 from .config import Config
 from .food_nutrition import calculate_total_nutrition
 from .health_info import generate_health_issue_info, generate_lifestyle_suggestions
-from .config import Config
-from PIL import Image
-import io
-from datetime import datetime
-from app.utils import upload_base64_to_cloudinary
-from app.config import Config
 from .service_clients import (
     ServiceCallError,
     call_classification_service,
     call_detection_service,
     call_food_detection_service,
 )
-from .utils import crop_regions, draw_boxes, image_to_base64, apply_nms, deduplicate_by_label
+from .utils import crop_regions, draw_boxes, image_to_base64, apply_nms, deduplicate_by_label, upload_base64_to_cloudinary
 
 def register_routes(app):
 
@@ -86,8 +80,6 @@ def register_routes(app):
 
             # Nếu là bệnh thật → gọi classification
             if requires_classification:
-                disease_pred = classify_image(crop)
-                # Gọi classification service cho các bệnh da liễu
                 try:
                     disease_pred = call_classification_service(crop)
                 except ServiceCallError as error:
