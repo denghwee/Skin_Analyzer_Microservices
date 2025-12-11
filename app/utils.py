@@ -1,8 +1,13 @@
 import base64
+import os
+import logging
 from io import BytesIO
 from PIL import Image, ImageDraw
+import cloudinary
 import cloudinary.uploader
 import tempfile
+from typing import List, Dict, Any
+
 def crop_regions(image, detections):
     crops = []
     for det in detections:
@@ -192,6 +197,17 @@ def upload_base64_to_cloudinary(base64_str, folder="skin_analysis"):
     image_bytes = base64.b64decode(base64_str)
 
     # Dùng file tạm để upload
+    # Check for Cloudinary configuration (CLOUDINARY_URL or individual vars)
+    has_cloudinary_url = bool(os.environ.get("CLOUDINARY_URL"))
+    has_individual = bool(
+        os.environ.get("CLOUDINARY_API_KEY") and os.environ.get("CLOUDINARY_API_SECRET") and os.environ.get("CLOUDINARY_CLOUD_NAME")
+    )
+
+    # If Cloudinary not configured, fall back to returning a data URI (so UI can still render)
+    if not (has_cloudinary_url or has_individual or getattr(cloudinary.config(), 'api_key', None)):
+        logging.warning("Cloudinary credentials not found - returning base64 data URI as fallback.")
+        return f"data:image/jpeg;base64,{base64_str}"
+
     with tempfile.NamedTemporaryFile(delete=False) as temp:
         temp.write(image_bytes)
         temp.flush()
@@ -202,4 +218,4 @@ def upload_base64_to_cloudinary(base64_str, folder="skin_analysis"):
             resource_type="image"
         )
 
-        return result["secure_url"]
+        return result.get("secure_url")

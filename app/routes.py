@@ -1,7 +1,7 @@
 from flask import request, jsonify, render_template
 from .objectdetection_service import detect_objects
 from .classification_service import classify_image
-from .utils import crop_regions, draw_boxes, image_to_base64
+from .utils import crop_regions, draw_boxes, image_to_base64, upload_base64_to_cloudinary
 from .health_info import generate_health_issue_info, generate_lifestyle_suggestions
 from .config import Config
 from PIL import Image

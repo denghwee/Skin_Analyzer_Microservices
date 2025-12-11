@@ -66,5 +66,15 @@ Pretrained model weights are stored in `app/models/` and are loaded at runtime; 
 - The shipped model weights are for demo purposes. Validate accuracy and compliance before clinical use.
 - Delete `app/static/result.jpg` between runs if you need to clear prior results.
 
+## Cloudinary (optional)
+
+This project uploads annotated images to Cloudinary when credentials are provided. If you want to enable remote image hosting set either the `CLOUDINARY_URL` environment variable or the individual variables below in your environment or `.env` file:
+
+- `CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+
+If Cloudinary is not configured the application will fall back to returning a `data:` URI (base64) for the annotated image so the UI still works locally.
+
 
 
