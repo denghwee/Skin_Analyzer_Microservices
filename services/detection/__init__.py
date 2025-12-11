@@ -1,4 +1,0 @@
-"""
-Detection microservice package.
-"""
-

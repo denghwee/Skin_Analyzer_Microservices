@@ -8,86 +8,35 @@
 <body>
   <div class="wrapper" aria-live="polite">
     <div class="card">
-      <!-- Tab Navigation -->
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="skin">🩺 Skin Analysis</button>
-        <button class="tab-btn" data-tab="food">🍕 Food Detection</button>
-      </div>
+      <h1>🩺 Skin Health Analyzer</h1>
+      <p class="subtitle">
+        Upload a clear facial or skin image and let our AI help you screen for common dermatological conditions.
+      </p>
 
-      <!-- Skin Analysis Tab -->
-      <div class="tab-content active" id="skin-tab">
-        <h1>🩺 Skin Health Analyzer</h1>
-        <p class="subtitle">
-          Upload a clear facial or skin image and let our AI help you screen for common dermatological conditions.
-        </p>
+      {% if error %}
+        <p class="alert">{{ error }}</p>
+      {% endif %}
 
-        {% if error %}
-          <p class="alert">{{ error }}</p>
-        {% endif %}
-
-        <form action="/analyze" method="POST" enctype="multipart/form-data" id="uploadForm">
-          <div class="upload-area" id="uploadArea">
-            <input type="file" name="image" id="image" accept="image/*" required>
-            <label for="image" id="uploadLabel">
-              <span class="emoji" aria-hidden="true">📷</span>
-              Tap to browse or drop an image
-              <span>PNG, JPG up to 10MB</span>
-            </label>
-            <img id="preview-img" src="" alt="Preview" class="preview">
-          </div>
-          <button type="submit" class="btn">Analyze Now</button>
-        </form>
-      </div>
-
-      <!-- Food Detection Tab -->
-      <div class="tab-content" id="food-tab">
-        <h1>🍕 Food Detection</h1>
-        <p class="subtitle">
-          Upload an image of food to detect and identify dishes with confidence scores.
-        </p>
-
-        <form id="foodForm" enctype="multipart/form-data">
-          <div class="upload-area" id="foodUploadArea">
-            <input type="file" name="image" id="foodImage" accept="image/*" required>
-            <label for="foodImage" id="foodUploadLabel">
-              <span class="emoji" aria-hidden="true">📸</span>
-              Tap to browse or drop a food image
-              <span>PNG, JPG up to 10MB</span>
-            </label>
-            <img id="food-preview-img" src="" alt="Preview" class="preview">
-          </div>
-          <button type="button" class="btn" id="detectFoodBtn">Detect Food</button>
-        </form>
-
-        <div id="foodResults" style="display: none; margin-top: 32px;">
-          <img id="foodResultImage" src="" alt="Result" class="result-image" style="display: none;">
-          <div id="foodResultContent"></div>
+      <form action="/analyze" method="POST" enctype="multipart/form-data" id="uploadForm">
+        <div class="upload-area" id="uploadArea">
+          <input type="file" name="image" id="image" accept="image/*" required>
+          <label for="image" id="uploadLabel">
+            <span class="emoji" aria-hidden="true">📷</span>
+            Tap to browse or drop an image
+            <span>PNG, JPG up to 10MB</span>
+          </label>
+          <img id="preview-img" src="" alt="Preview" class="preview">
         </div>
-        <div id="foodLoading" style="display: none; text-align: center; margin-top: 24px;">
-          <p>🔄 Processing image...</p>
-        </div>
-      </div>
+        <button type="submit" class="btn">Analyze Now</button>
+      </form>
     </div>
   </div>
 
   <script>
-    // Tab switching
-    const tabBtns = document.querySelectorAll(".tab-btn");
-    const tabContents = document.querySelectorAll(".tab-content");
-
-    tabBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        tabBtns.forEach(b => b.classList.remove("active"));
-        tabContents.forEach(c => c.classList.remove("active"));
-        btn.classList.add("active");
-        document.getElementById(btn.dataset.tab + "-tab").classList.add("active");
-      });
-    });
-
-    // Skin Analysis Upload
     const input = document.getElementById("image");
     const preview = document.getElementById("preview-img");
     const label = document.getElementById("uploadLabel");
+
     const uploadArea = document.getElementById("uploadArea");
 
     const handleFileChange = () => {
@@ -129,238 +78,6 @@
         handleFileChange();
       }
     });
-
-    // Food Detection Upload
-    const foodInput = document.getElementById("foodImage");
-    const foodPreview = document.getElementById("food-preview-img");
-    const foodLabel = document.getElementById("foodUploadLabel");
-    const foodUploadArea = document.getElementById("foodUploadArea");
-
-    const handleFoodFileChange = () => {
-      const file = foodInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          foodPreview.src = e.target.result;
-          foodPreview.style.display = "block";
-          foodLabel.style.display = "none";
-        };
-        reader.readAsDataURL(file);
-        foodUploadArea.classList.add("has-image");
-      }
-    };
-
-    foodInput.addEventListener("change", handleFoodFileChange);
-
-    ["dragenter", "dragover"].forEach(eventName => {
-      foodUploadArea.addEventListener(eventName, event => {
-        event.preventDefault();
-        event.stopPropagation();
-        foodUploadArea.classList.add("dragover");
-      });
-    });
-
-    ["dragleave", "drop"].forEach(eventName => {
-      foodUploadArea.addEventListener(eventName, event => {
-        event.preventDefault();
-        event.stopPropagation();
-        foodUploadArea.classList.remove("dragover");
-      });
-    });
-
-    foodUploadArea.addEventListener("drop", event => {
-      const { files } = event.dataTransfer;
-      if (files && files.length) {
-        foodInput.files = files;
-        handleFoodFileChange();
-      }
-    });
-
-    // Food Detection Button Click
-    document.getElementById("detectFoodBtn").addEventListener("click", async () => {
-      const file = foodInput.files[0];
-      if (!file) {
-        alert("Please select an image first");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("image", file);
-
-      document.getElementById("foodLoading").style.display = "block";
-      document.getElementById("foodResults").style.display = "none";
-
-      try {
-        const response = await fetch("/detect_food", {
-          method: "POST",
-          body: formData
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        displayFoodResults(data);
-      } catch (error) {
-        document.getElementById("foodResults").style.display = "block";
-        document.getElementById("foodResultContent").innerHTML = `<p class="alert" style="margin: 0;">❌ Error: ${error.message}</p>`;
-      } finally {
-        document.getElementById("foodLoading").style.display = "none";
-      }
-    });
-
-    function displayFoodResults(data) {
-      const resultImg = document.getElementById("foodResultImage");
-      const resultContent = document.getElementById("foodResultContent");
-
-      // Display annotated image
-      if (data.annotated_image_base64) {
-        resultImg.src = "data:image/png;base64," + data.annotated_image_base64;
-        resultImg.style.display = "block";
-      }
-
-      let html = "<h2>Food Detection Results</h2>";
-
-      // Display all detections above threshold
-      if (data.detection && data.detection.length > 0) {
-        html += `
-          <div class="result-box">
-            <h3>🍽️ Detected Foods (Confidence ≥ ${(data.metadata.threshold * 100).toFixed(0)}%)</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Food Item</th>
-                  <th>Confidence</th>
-                  <th>BBox</th>
-                </tr>
-              </thead>
-              <tbody>
-        `;
-        data.detection.forEach(item => {
-          const bboxStr = item.bbox ? `[${item.bbox.map(v => v.toFixed(0)).join(', ')}]` : 'N/A';
-          html += `
-            <tr>
-              <td><strong>${item.detected_class}</strong></td>
-              <td>${(item.confidence * 100).toFixed(1)}%</td>
-              <td style="font-size: 0.85em; color: #666;">${bboxStr}</td>
-            </tr>
-          `;
-        });
-        html += `</tbody></table></div>`;
-      } else {
-        html += `<p style="color: #8896bb;">No foods detected above threshold.</p>`;
-      }
-
-      // Display nutrition analysis
-      if (data.nutrition_analysis) {
-        const nutrition = data.nutrition_analysis;
-        
-        // Individual items nutrition
-        if (nutrition.individual_items && nutrition.individual_items.length > 0) {
-          html += `
-            <div class="result-box">
-              <h3>📋 Nutrition Information by Item</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Food Item</th>
-                    <th>Serving Type</th>
-                    <th>Calories</th>
-                    <th>Fat (g)</th>
-                    <th>Saturates (g)</th>
-                    <th>Sugar (g)</th>
-                    <th>Salt (g)</th>
-                  </tr>
-                </thead>
-                <tbody>
-          `;
-          nutrition.individual_items.forEach(item => {
-            const nut = item.nutrition;
-            html += `
-              <tr>
-                <td><strong>${item.name}</strong></td>
-                <td>${item.serving_type}</td>
-                <td>${nut.Calories}</td>
-                <td>${nut.Fat}</td>
-                <td>${nut.Saturates}</td>
-                <td>${nut.Sugar}</td>
-                <td>${nut.Salt}</td>
-              </tr>
-            `;
-          });
-          html += `</tbody></table></div>`;
-        }
-        
-        // Total nutrition
-        if (nutrition.total_nutrition) {
-          const total = nutrition.total_nutrition;
-          html += `
-            <div class="result-box">
-              <h3>📊 Total Nutrition (All Items Combined)</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Nutrient</th>
-                    <th>Total Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style="background: #fff3cd;">
-                    <td><strong>Calories (kcal)</strong></td>
-                    <td><strong>${total.Calories.toFixed(1)}</strong></td>
-                  </tr>
-                  <tr>
-                    <td>Fat (g)</td>
-                    <td>${total.Fat.toFixed(1)}</td>
-                  </tr>
-                  <tr>
-                    <td>Saturated Fat (g)</td>
-                    <td>${total.Saturates.toFixed(1)}</td>
-                  </tr>
-                  <tr>
-                    <td>Sugar (g)</td>
-                    <td>${total.Sugar.toFixed(1)}</td>
-                  </tr>
-                  <tr>
-                    <td>Salt (g)</td>
-                    <td>${total.Salt.toFixed(1)}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <p style="font-size: 0.9em; color: #666; margin-top: 8px;">
-                ℹ️ Total based on ${nutrition.items_count} detected food item(s)
-              </p>
-            </div>
-          `;
-        }
-      }
-
-      // Metadata
-      if (data.metadata) {
-        html += `
-          <div class="result-box">
-            <h3>📊 Metadata</h3>
-            <p>Total Detections: <strong>${data.metadata.total_detections}</strong></p>
-            <p>Timestamp: <strong>${new Date(data.metadata.timestamp).toLocaleString()}</strong></p>
-            <p>Image Size: <strong>${data.metadata.image_size.width} × ${data.metadata.image_size.height}</strong>px</p>
-          </div>
-        `;
-      }
-
-      // Display full JSON response
-      html += `
-        <div class="result-box">
-          <h3>📋 Full JSON Response</h3>
-          <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 0.85em; color: #333;">
-${JSON.stringify(data, null, 2)}
-          </pre>
-        </div>
-      `;
-
-      resultContent.innerHTML = html;
-      document.getElementById("foodResults").style.display = "block";
-    }
   </script>
 </body>
 </html>

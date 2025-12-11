@@ -1,6 +1,5 @@
 import base64
 from io import BytesIO
-from typing import List, Dict, Any
 from PIL import Image, ImageDraw
 import cloudinary.uploader
 import tempfile
