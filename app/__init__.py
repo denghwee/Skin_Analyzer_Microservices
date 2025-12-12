@@ -1,44 +1,38 @@
 import cloudinary
 from flask import Flask
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+
 from .config import Config
 from .routes import register_routes
 
-
-def create_app(config_object: type[Config] = Config) -> Flask:
-    app = Flask(__name__, template_folder='templates', static_folder='static')
-    app.config.from_object(config_object)
-    register_routes(app)
-    return app
-
-
-app = create_app()
 db = SQLAlchemy()
 migrate = Migrate()
 jwt = JWTManager()
-def create_app():
+
+def create_app(config_object=Config):
     app = Flask(__name__, template_folder="templates", static_folder="static")
 
-    # Load config (MySQL, secret key…)
-    app.config.from_object(Config)
+    # Load config
+    app.config.from_object(config_object)
 
-
-    # Init database + migrate
+    # Init extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    jwt.init_app(app)
 
-    # ⭐⭐⭐ QUAN TRỌNG: IMPORT ENTITY TẠI ĐÂY ⭐⭐⭐
-    # Nếu không import, Migrate sẽ không thấy model => "No changes detected"
+    # Import models to make migrate work
     from app.models.analysis_entity import HealthAnalysis
+
+    # Cloudinary
     cloudinary.config(
         cloud_name=app.config["CLOUDINARY_CLOUD_NAME"],
         api_key=app.config["CLOUDINARY_API_KEY"],
-        api_secret=app.config["CLOUDINARY_API_SECRET"]
+        api_secret=app.config["CLOUDINARY_API_SECRET"],
     )
-    # Register blueprints (route groups)
+
     register_routes(app)
-    jwt.init_app(app)
+    from app.controllers.analysis_controller import analysis_blueprint
+    app.register_blueprint(analysis_blueprint, url_prefix="/api/analysis")
     return app

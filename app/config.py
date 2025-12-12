@@ -2,6 +2,8 @@ import os
 
 import os
 import torch
+from dotenv import load_dotenv
+load_dotenv()
 
 class Config:
     DETECTION_SERVICE_URL = os.getenv("DETECTION_SERVICE_URL", "http://localhost:5001/detect")
