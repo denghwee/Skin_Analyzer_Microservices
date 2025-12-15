@@ -12,7 +12,7 @@ def register_routes(app):
 
     @app.route('/')
     def home():
-        return render_template('index.html')
+        return "OK", 200
 
     @app.route('/analyze', methods=['POST'])
     def analyze():
