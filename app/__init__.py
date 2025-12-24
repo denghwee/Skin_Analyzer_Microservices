@@ -34,5 +34,5 @@ def create_app(config_object=Config):
 
     register_routes(app)
     from app.controllers.analysis_controller import analysis_blueprint
-    app.register_blueprint(analysis_blueprint, url_prefix="/api/analysis")
+    app.register_blueprint(analysis_blueprint, url_prefix="/api/v1/analysis")
     return app

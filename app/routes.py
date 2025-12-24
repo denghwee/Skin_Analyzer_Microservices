@@ -14,7 +14,7 @@ def register_routes(app):
     def home():
         return "OK", 200
 
-    @app.route('/analyze', methods=['POST'])
+    @app.route('/api/v1/analyze', methods=['POST'])
     def analyze():
         file = request.files.get('image')
         if not file:
@@ -127,6 +127,6 @@ def register_routes(app):
             'metadata': metadata
         })
 
-    @app.route('/health')
+    @app.route('/api/v1/health')
     def health():
         return jsonify({'status': 'ok'})

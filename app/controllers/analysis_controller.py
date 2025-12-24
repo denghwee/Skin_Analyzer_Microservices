@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt
 from app.models.analyze_request_dto import AnalyzeRequestDTO
 from app.services.analysis_service import AnalysisService
 
-analysis_blueprint = Blueprint("analysis", __name__)
+analysis_blueprint = Blueprint("v1/analysis", __name__)
 
 
 # ====== Helper function lấy userId từ JWT ======

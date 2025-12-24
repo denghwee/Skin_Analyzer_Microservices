@@ -1,17 +1,30 @@
 FROM python:3.11-slim
 
+# ===== System dependencies =====
 RUN apt-get update && apt-get install -y \
-    libglib2.0-0 libsm6 libxrender1 libxext6 ffmpeg \
+    build-essential \
+    libglib2.0-0 \
+    libsm6 \
+    libxrender1 \
+    libxext6 \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
+# ===== Python deps =====
 COPY requirements.txt .
+RUN python -m pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
+# ===== App source =====
 COPY . .
 
+# ===== Local config =====
+ENV FLASK_ENV=development
 ENV PYTHONUNBUFFERED=1
+ENV SERVICE_PORT=5001
 
+EXPOSE 5001
 
-CMD ["sh", "-c", "gunicorn run:app --bind 0.0.0.0:${PORT} --timeout 300"]
+CMD ["sh", "-c", "python run.py"]
