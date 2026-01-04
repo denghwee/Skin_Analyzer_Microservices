@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 
-from .config import Config
-from .routes import register_routes
+from app.config import Config
+from app.routes.routes import register_routes
 
 db = SQLAlchemy()
 migrate = Migrate()

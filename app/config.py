@@ -1,6 +1,5 @@
 import os
 
-import os
 import torch
 from dotenv import load_dotenv
 load_dotenv()
@@ -46,13 +45,20 @@ class Config:
     # ======= AI MODEL CONFIG =======
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-    EFFICIENTNET_PATH = "app/models/efficientnet_b2_skin.pth"
-    YOLO_MODEL_PATH = "app/models/yolov11_skin.pt"
+    EFFICIENTNET_PATH = "app/models_AI/efficientnet_b2_skin.pth"
+    EFFICIENTNET_ONNX_PATH = "app/models_AI/efficientnet_b2_skin.onnx"
 
-    IMG_SIZE = (224, 224)
+    YOLO_MODEL_PATH = "app/models_AI/yolov10_skin.pt"
+    YOLO_MODEL_ONNX_PATH = "app/models_AI/yolov10_skin.onnx"
+
+    DETECTION_IMG_SIZE = (640, 640)
+    CLASSIFICATION_IMG_SIZE = (224, 224)
+    
+    CONFIDENCE = 0.25
     CLASS_NAMES = [
-        "none", "acne", "carcinoma", "eczema",
-        "keratosis", "rosacea", "milia"
+        'None', 'Dark Circle', 'Dark Circle', 'Eyebag', 'Acne Scar', 'Blackhead',
+        'Blackheads', 'Dark spot', 'Darkspot', 'Freckle', 'Melasma', 'Nodules',
+        'Papules', 'Pustules', 'Skinredness', 'Vascular', 'Whitehead', 'Whiteheads', 'Wrinkle'
     ]
     NUM_CLASSES = len(CLASS_NAMES)
 
