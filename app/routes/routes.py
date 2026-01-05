@@ -1,4 +1,6 @@
 from flask import request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt
+
 from app.services_AI.objectdetection import SkinDetectionService
 from app.services_AI.classification import SkinClassificationService
 from app.utils import (
@@ -21,7 +23,14 @@ def register_routes(app):
         return "OK", 200
 
     @app.route('/api/v1/analyze', methods=['POST'])
+    @jwt_required()
     def analyze():
+
+        claims = get_jwt()
+        user_id = claims.get("userId")
+        if not user_id:
+            return jsonify({"error": "Invalid token — no userId"}), 401
+
         file = request.files.get('image')
         if not file:
             return jsonify({'error': 'No image uploaded.'}), 400
@@ -30,8 +39,8 @@ def register_routes(app):
 
         detect_model = SkinDetectionService()
         detections = detect_model.detect(image)
+
         if not detections:
-            # No detection → VẪN UPLOAD ẢNH GỐC lên Cloudinary
             encoded = image_to_base64(image)
             cloud_url = upload_base64_to_cloudinary(encoded)
 
@@ -55,7 +64,7 @@ def register_routes(app):
                 }
             })
 
-        # Có detection → xử lý crop & classification
+        # ---- phần dưới giữ nguyên 100% ----
         cropped_images = crop_regions(image, detections)
 
         results = []
@@ -68,10 +77,8 @@ def register_routes(app):
 
             requires_classification = detected_class in Config.CLASSES_REQUIRING_CLASSIFICATION
 
-            # Nếu là bệnh thật → gọi classification
             if requires_classification:
                 classify_model = SkinClassificationService()
-                # Gọi classification service cho các bệnh da liễu
                 disease_pred = classify_model.classify(crop)
                 results.append({
                     'detected_class': detected_class,
@@ -89,41 +96,12 @@ def register_routes(app):
                     'requires_classification': False
                 })
 
-        # Vẽ bounding boxes lên ảnh
         image_with_boxes = draw_boxes(image.copy(), detections)
-
-        # Convert annotated image → base64
         annotated_base64 = image_to_base64(image_with_boxes)
-
-        # UPLOAD TO CLOUDINARY 🚀
         cloud_url = upload_base64_to_cloudinary(annotated_base64)
 
-        # Health info + suggestions
         health_issue_info = generate_health_issue_info(results, detection_confidences)
         lifestyle_suggestions = generate_lifestyle_suggestions(results, detection_confidences)
-
-        # Metadata
-        timestamp = datetime.now().isoformat()
-        metadata = {
-            'timestamp': timestamp,
-            'total_detections': len(results),
-            'image_size': {
-                'width': image.width,
-                'height': image.height
-            },
-            'detection_summary': [
-                {
-                    'detected_class': r['detected_class'],
-                    'disease': r['disease_prediction'].get('class_name', 'unknown') if r.get(
-                        'disease_prediction') else None,
-                    'detection_confidence': r['confidence'],
-                    'classification_confidence': r['disease_prediction'].get('confidence', 0) if r.get(
-                        'disease_prediction') else None,
-                    'requires_classification': r.get('requires_classification', False)
-                }
-                for r in results
-            ]
-        }
 
         return jsonify({
             'status': 'success',
@@ -131,7 +109,26 @@ def register_routes(app):
             'detection': results,
             'health_issue_info': health_issue_info,
             'lifestyle_suggestions': lifestyle_suggestions,
-            'metadata': metadata
+            'metadata': {
+                'timestamp': datetime.now().isoformat(),
+                'total_detections': len(results),
+                'image_size': {
+                    'width': image.width,
+                    'height': image.height
+                },
+                'detection_summary': [
+                    {
+                        'detected_class': r['detected_class'],
+                        'disease': r['disease_prediction'].get('class_name', 'unknown')
+                        if r.get('disease_prediction') else None,
+                        'detection_confidence': r['confidence'],
+                        'classification_confidence': r['disease_prediction'].get('confidence', 0)
+                        if r.get('disease_prediction') else None,
+                        'requires_classification': r.get('requires_classification', False)
+                    }
+                    for r in results
+                ]
+            }
         })
 
     @app.route('/api/v1/health')
